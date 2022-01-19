@@ -1,4 +1,4 @@
-Kivi Paperi Sakset
+# Kivi Paperi Sakset
 
 Ideana on, että käyttäjä voi rekisteröityä, kirjautua ja aloittaa kivi paperi sakset tyylisen pelin tai pelata toisen luomaa kivi paperi sakset peliä. 
 
