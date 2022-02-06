@@ -1,0 +1,23 @@
+
+.gameForm {
+    margin: auto;
+    width: 50%;
+    margin-top: 5%;
+    border: 1px solid black;
+}
+
+.gameContainer {
+    margin-top: 2%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+.playerb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
