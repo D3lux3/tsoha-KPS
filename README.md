@@ -3,7 +3,7 @@
 <b>Työntekoni on hidastunut koronatartuntani vuoksi tällä viikolla.</b>
 
 ### Heroku:
-En saanut herokua valitettavasti vielä toimimaan, mutta se on seuraavaksi työnalla.
+Herokun en saanut herokun tietokantaa toimimaan, mutta se on seuraavaksi työnalla.
 Linkki:
 
 https://tsoha-kps.herokuapp.com/
