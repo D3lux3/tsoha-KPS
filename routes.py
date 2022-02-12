@@ -1,20 +1,34 @@
+from crypt import methods
 from app import app
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
-from utils import check_user_and_password, get_logged_in_user, get_one_game, get_ongoing_games, get_winner, is_logged_in
+from utils import check_user_and_password, delete_player_from_db, get_all_players, get_logged_in_user, get_one_game, get_ongoing_games, get_winner, is_logged_admin, is_logged_in
 
 @app.route("/")
 def index():
     if is_logged_in():
+        print(is_logged_admin())
         all_games = get_ongoing_games()
-        print(all_games)
         return render_template("index.html", games= all_games)
     return redirect("/login")
 
 @app.route("/registration")
 def registration():
     return render_template("registration.html")
+
+@app.route("/players")
+def players():
+    all_players = get_all_players()
+    is_admin = is_logged_admin()
+    return render_template("players.html", players=all_players, is_admin=is_admin)
+
+@app.route("/delete/<int:id>", methods=["POST"])
+def delete_player(id):
+    if is_logged_in() and is_logged_admin():
+        delete_player_from_db(id)
+    
+    return redirect("/")
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -25,8 +39,8 @@ def register():
         return
 
     hash_pass = generate_password_hash(password)
-    sql = "INSERT INTO users (username, password, level) VALUES (:username, :password, :level)"
-    db.session.execute(sql, {"username":username, "password":hash_pass, "level":1})
+    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+    db.session.execute(sql, {"username":username, "password":hash_pass})
     db.session.commit()
     
     return redirect("/")

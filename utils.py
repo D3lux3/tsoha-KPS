@@ -40,12 +40,21 @@ def get_winner(player_a, player_a_hand, player_b, player_b_hand):
     elif player_a_hand == "SCISSORS" and player_b_hand == "PAPER":
         return player_a
     return player_b
-    
+
+def delete_player_from_db(player_id):
+    sql = """DELETE from users WHERE id=:player_id;"""
+    db.session.execute(sql, {"player_id": player_id})
+    db.session.commit()
 
 def is_logged_admin():
     if is_logged_in:
         username = session.get("username")
-        sql = "SELECT id, username FROM users U WHERE username=:username AND userlevel=1"
+        sql = """
+                SELECT u.username AS username FROM admins
+                JOIN users u on u.id = admins.user_id
+                WHERE username=:username;
+              """
+
         result = db.session.execute(sql, {"username": username})
         user = result.fetchone()
         if user:
@@ -54,11 +63,19 @@ def is_logged_admin():
     return False
 
 def get_ongoing_games():
-    sql = "SELECT * FROM games;"
+    sql = """SELECT games.id, a.username AS player_a, player_a_hand, b.username AS player_b, player_b_hand, game_status, u.username AS winner, time FROM games
+           LEFT JOIN users u on u.id = games.winner
+           LEFT JOIN users a on a.id = games.player_a
+           LEFT JOIN users b on b.id = games.player_b;"""
     result = db.session.execute(sql)
     games = result.fetchall()
     return games
 
+def get_all_players():
+    sql = "SELECT id, username FROM users;"
+    result = db.session.execute(sql)
+    players = result.fetchall()
+    return players
 
 def get_one_game(id):
     sql = "SELECT * FROM games WHERE id=:id;"
