@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
+
+{% extends "header.html" %}
+{% block content %}
+
+{% for request in friend_requests %}
+<div class="friendRequest">
+    <p>{{ request.player_a }} want's to be your friend</p>
+    <form action="/invites/accept/{{ request.id }}" method="POST">
+        <input type="submit" class="acceptFriend" value="Accept">
+    </form>
+    <form action="/invites/decline/{{ request.id }}" method="POST">
+        <input type="submit" class="declineFriend" value="Decline">
+    </form>
+</div>
+
+
+
+{% endfor %}
+
+
+
+
+{% endblock %}

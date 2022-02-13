@@ -1,10 +1,16 @@
 <h1>Login</h1>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
 
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<form action="/log" method="POST">
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <strong class="errorFlash">{{ message }}</strong>
+      <hr>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form action="/login" method="POST">
     <p>Username:<br>
         <input type="text" name="username">
     </p>
@@ -14,6 +20,5 @@
     <input type="submit" value="Kirjaudu">
 </form>
 
-{% endif %}
 
 <a href="/registration">Dont have an account? Register here</a>
