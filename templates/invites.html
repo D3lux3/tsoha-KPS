@@ -16,6 +16,63 @@
 </div>
 
 
+{% endfor %}
+
+{% for game in game_invites %}
+<div class="gameDetails">
+    <div class="gameOptions">
+        {% if game.player_a == session.username or is_admin %}
+        <form action="/delete/game/{{ game.id }}" method="POST">
+            <input type="submit" class="deleteGame" value="Delete game">
+        </form>
+    
+        {% endif %}
+    </div>
+
+
+
+    <div class="gameContainer">
+        <div class="playera">
+            {{ game.player_a }}
+        </div>
+        <div class="gameStatusBox">
+            <h2>Game status:</h2>
+            {% if game.game_status %}
+            <p>Result</p>
+            <p>Winner:</p>
+
+            {% if game.winner %}
+            {{ game.winner }}
+            {% else %}
+            DRAW
+            {% endif %}
+
+            {% else %}
+            <p>Ongoing game</p>
+            {% endif %}
+        </div>
+        <div class="playerb">
+            {% if not game.player_b %}
+            <form action="/play/{{game.id}}" method="POST" class="playerb_form">
+                Your hand:
+                <p>
+                    <input type="radio" name="hand" value="ROCK"> Rock
+                    <input type="radio" name="hand" value="PAPER"> Paper
+                    <input type="radio" name="hand" value="SCISSORS"> Scissors
+                <p>
+
+                    <input type="submit" value="Play game">
+            </form>
+            {% else %}
+            {{ game.player_b }}
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
 
 {% endfor %}
 

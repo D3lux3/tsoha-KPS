@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
 
 {% extends "header.html" %}
 {% block content %}
@@ -16,6 +17,19 @@
     {% if is_not_friend_yet(player.id) %}
     <form action="/invites/invite/{{player.id}}" method="POST">
         <input type="submit" value="Send friend request">
+    </form>
+    {% endif %}
+
+    {% if is_logged_friend_with_player(player.id) %}
+    <form action="/create/invite/{{player.id}}" method="POST" class="gameInviteForm">
+        Your hand:
+        <p>
+            <input type="radio" name="hand" value="ROCK"> Rock
+            <input type="radio" name="hand" value="PAPER"> Paper
+            <input type="radio" name="hand" value="SCISSORS"> Scissors
+        <p>
+    
+            <input type="submit" value="Create game invite">
     </form>
     {% endif %}
     

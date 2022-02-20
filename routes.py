@@ -4,7 +4,7 @@ from app import app
 from flask import render_template, request, session, redirect, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
-from utils import accept_friend_request, check_user_and_password, decline_friend_request, delete_game_by_id, delete_player_from_db, get_all_players, get_friendrequests_for_user, get_logged_in_user, get_one_game, get_ongoing_games, get_winner, handle_login, is_game_owned_by_logged_user, is_logged_admin, is_logged_in, is_not_friend_yet, send_friend_req
+from utils import accept_friend_request, check_user_and_password, create_game_invite_to_db, create_game_to_db, decline_friend_request, delete_game_by_id, delete_player_from_db, get_all_players, get_friendrequests_for_user, get_game_invites_for_logged, get_logged_in_user, get_one_game, get_ongoing_games, get_winner, handle_login, is_game_owned_by_logged_user, is_logged_admin, is_logged_friend_with_player, is_logged_in, is_not_friend_yet, send_friend_req
 
 @app.route("/")
 def index():
@@ -25,6 +25,14 @@ def accept_friend(id):
     accept_friend_request(id)
     return redirect("/invites")
 
+@app.route("/create/invite/<int:id>", methods=["POST"])
+def crete_game_invite(id):
+    if is_logged_in and is_logged_friend_with_player(id):
+        hand = request.form["hand"]
+        create_game_invite_to_db(hand, id)
+    return redirect("/")
+
+
 @app.route("/invites/decline/<int:id>", methods=["POST"])
 def decline_friend(id):
     decline_friend_request(id)
@@ -39,13 +47,14 @@ def friend_request(id):
 def invites():
     if is_logged_in:
         requests = get_friendrequests_for_user()
-        return render_template("invites.html", friend_requests=requests)
+        game_invites = get_game_invites_for_logged()
+        return render_template("invites.html", friend_requests=requests, game_invites=game_invites)
 
 @app.route("/players")
 def players():
     all_players = get_all_players()
     is_admin = is_logged_admin()
-    return render_template("players.html", players=all_players, is_admin=is_admin, is_not_friend_yet=is_not_friend_yet)
+    return render_template("players.html", players=all_players, is_admin=is_admin, is_not_friend_yet=is_not_friend_yet, is_logged_friend_with_player=is_logged_friend_with_player)
 
 @app.route("/delete/<int:id>", methods=["POST"])
 def delete_player(id):
@@ -96,11 +105,8 @@ def play(id):
 def create_game():
     if not is_logged_in:
         return redirect("/login")
-    user_id = int(get_logged_in_user().id)
     hand = request.form["hand"]
-    sql = "INSERT INTO games (player_a, player_a_hand, game_status, time) VALUES (:player_a, :player_a_hand, :game_status, NOW())"
-    db.session.execute(sql, {"player_a": user_id, "player_a_hand": hand, "game_status": False})
-    db.session.commit()
+    create_game_to_db(hand)
     return redirect("/")
 
 @app.route("/login", methods=["GET","POST"])
@@ -121,10 +127,6 @@ def login():
             return redirect("/login")
 
     return render_template("login.html")
-
-
-
-
 
 
 @app.route("/logout")
