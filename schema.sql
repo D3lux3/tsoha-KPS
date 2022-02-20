@@ -18,7 +18,7 @@ CREATE TABLE games (
     player_b_hand TEXT,
     game_status BOOLEAN,
     winner INTEGER REFERENCES users ON DELETE CASCADE,
-    time TIMESTAMP,
+    time TIMESTAMP
 );
 
 
@@ -27,11 +27,11 @@ CREATE TABLE friends (
     player_a INTEGER REFERENCES users ON DELETE CASCADE,
     player_b INTEGER REFERENCES users ON DELETE CASCADE,
     accepted BOOLEAN
-)
+);
 
 CREATE TABLE game_invites(
     id SERIAL PRIMARY KEY,
     game_id INTEGER REFERENCES games ON DELETE CASCADE,
     creator INTEGER REFERENCES users ON DELETE CASCADE,
-    target_player INTEGER REFERENCES users ON DELETE CASCADE,
-)
+    target_player INTEGER REFERENCES users ON DELETE CASCADE
+);

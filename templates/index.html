@@ -4,16 +4,20 @@
 {% extends "header.html" %}
 {% block content %}
 
-<form action="/create" method="POST" class="gameForm">
-    Your hand:
-    <p>
-        <input type="radio" name="hand" value="ROCK"> Rock
-        <input type="radio" name="hand" value="PAPER"> Paper
-        <input type="radio" name="hand" value="SCISSORS"> Scissors
-    <p>
+<div>
+    <h2>Start game</h2>
+    <form action="/create" method="POST" class="gameForm">
+        Your hand:
+        <p>
+            <input type="radio" name="hand" value="ROCK"> Rock
+            <input type="radio" name="hand" value="PAPER"> Paper
+            <input type="radio" name="hand" value="SCISSORS"> Scissors
+        <p>
+    
+            <input type="submit" value="Start game">
+    </form>
+</div>
 
-        <input type="submit" value="Start game">
-</form>
 
 
 {% for game in games %}
