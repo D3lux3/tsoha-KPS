@@ -10,3 +10,4 @@ psycopg2-binary==2.9.3
 python-dotenv==0.19.2
 SQLAlchemy==1.4.31
 Werkzeug==2.0.2
+yapf==0.32.0
