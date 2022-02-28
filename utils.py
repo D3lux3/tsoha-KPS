@@ -1,6 +1,8 @@
+from xmlrpc.client import boolean
 from db import db
 from flask import session
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+import secrets
 
 def check_if_username_exists(username: str):
     sql = "SELECT id, username FROM users WHERE username=:username"
@@ -58,20 +60,48 @@ def create_game_to_db(hand):
     game = result.fetchone()
     return game
 
+def handle_register(username, password, password2):
+
+    if password != password2:
+        return "Passwords does not match."
+        
+    if len(username) <= 0 or len(password) <= 0:
+        return "Username or password cannot be empty"
+    
+    if check_if_username_exists(username):
+        return "Account with given username already exists. Please use another username."
+
+    hash_pass = generate_password_hash(password)
+    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+    db.session.execute(sql, {"username":username, "password":hash_pass})
+    db.session.commit()
+
+    return None
+
+def check_csrf(token) -> boolean:
+    return session["csrf_token"] == token
+
 def handle_login(username, password):
     error = None
     sql = "SELECT id, password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
 
-    if not user or check_user_and_password(username, password):
+    if not user or len(password) <= 0 or len(username) <= 0:
         error = "Username or password is incorrect."
         return error
 
     hashed_pass = user.password
+
+    if not check_password_hash(hashed_pass, password):
+        error = "Password is incorrect."
+        return error
+
+
     if check_password_hash(hashed_pass, password):
         session["username"] = username
         session["logged_in"] = True
+        session["csrf_token"] = secrets.token_hex(16)
         return error
 
     
@@ -165,6 +195,7 @@ def decline_friend_request(req_id):
 
 
 def is_game_owned_by_logged_user(id):
+
     if is_logged_in:
         username = session.get("username")
         sql = """
@@ -178,6 +209,24 @@ def is_game_owned_by_logged_user(id):
             return False
         return True
 
+def get_all_friends_of_logged():
+    user_id = get_logged_in_user().id
+
+    sql = """
+    SELECT f.id, f.player_b as user_id, username
+    FROM friends f
+    JOIN users u on u.id = f.player_b
+    WHERE (f.player_a=:id) AND f.accepted = TRUE
+    UNION
+    SELECT f.id, f.player_a as user_id, username
+    FROM friends f
+    JOIN users u on u.id = f.player_a
+    WHERE (f.player_b=:id) AND f.accepted = TRUE;
+    """
+    result = db.session.execute(sql, {"id": user_id})
+    friends = result.fetchall()
+    return friends
+
 def get_winner(player_a, player_a_hand, player_b, player_b_hand):
     if player_a_hand == player_b_hand:
         return None
@@ -188,6 +237,16 @@ def get_winner(player_a, player_a_hand, player_b, player_b_hand):
     elif player_a_hand == "SCISSORS" and player_b_hand == "PAPER":
         return player_a
     return player_b
+
+def delete_friend_by_id(target_id):
+    logged_user_id = get_logged_in_user().id
+
+    sql = """
+    DELETE FROM friends f
+    WHERE (f.player_a=:id OR f.player_b=:id) AND (f.player_a=:target OR f.player_b=:target) AND f.accepted = TRUE;
+    """
+    db.session.execute(sql, {"id": logged_user_id, "target": target_id})
+    db.session.commit()
 
 def delete_game_by_id(id):
     sql = """DELETE FROM games WHERE id=:id"""

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
+
+{% extends "header.html" %}
+{% block content %}
+<h1> Friends </h1>
+
+{% for player in friends %}
+<span class="friendContainer">
+    <h2 class="friendItem">{{ player.username }}</h2>
+
+    <form class="removeFriendButton" action="/delete/friend/{{player.user_id}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Remove friend">
+    </form>
+
+    <form action="/create/invite/{{player.id}}" method="POST" class="friendItem">
+        Your hand:
+        <p>
+            <input type="radio" name="hand" value="ROCK"> Rock
+            <input type="radio" name="hand" value="PAPER"> Paper
+            <input type="radio" name="hand" value="SCISSORS"> Scissors
+        <p>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">    
+            <input type="submit" value="Create game invite">
+    </form>
+    
+</span>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}

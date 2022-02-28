@@ -8,9 +8,11 @@
 <div class="friendRequest">
     <p>{{ request.player_a }} want's to be your friend</p>
     <form action="/invites/accept/{{ request.id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">    
         <input type="submit" class="acceptFriend" value="Accept">
     </form>
     <form action="/invites/decline/{{ request.id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" class="declineFriend" value="Decline">
     </form>
 </div>
@@ -23,6 +25,7 @@
     <div class="gameOptions">
         {% if game.player_a == session.username or is_admin %}
         <form action="/delete/game/{{ game.id }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" class="deleteGame" value="Delete game">
         </form>
     
@@ -60,7 +63,7 @@
                     <input type="radio" name="hand" value="PAPER"> Paper
                     <input type="radio" name="hand" value="SCISSORS"> Scissors
                 <p>
-
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     <input type="submit" value="Play game">
             </form>
             {% else %}

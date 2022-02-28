@@ -2,6 +2,26 @@
     border: 1px solid black;
 }   
 
+.friendItem {
+    flex-grow: 4;
+    margin: 2.5%;
+}
+
+.removeFriendButton {
+    flex-grow: 1;
+
+} 
+
+.friendContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: -3px 5px #33332d;
+    padding: 0.6rem 1rem;
+    border: 3px solid #33332d;
+    font-weight: 600;
+} 
+
 .gameForm {
     margin: auto;
     width: 50%;

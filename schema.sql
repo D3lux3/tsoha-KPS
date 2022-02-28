@@ -1,8 +1,7 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
-    password TEXT,
-    userlevel INTEGER
+    password TEXT
 );
 
 CREATE TABLE admins (

@@ -10,12 +10,14 @@
 
     {% if is_admin %}
     <form action="/delete/{{player.id}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Delete player">
     </form>
     {% endif %}
 
     {% if is_not_friend_yet(player.id) %}
     <form action="/invites/invite/{{player.id}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Send friend request">
     </form>
     {% endif %}
@@ -28,7 +30,7 @@
             <input type="radio" name="hand" value="PAPER"> Paper
             <input type="radio" name="hand" value="SCISSORS"> Scissors
         <p>
-    
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Create game invite">
     </form>
     {% endif %}
