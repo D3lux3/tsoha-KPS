@@ -64,10 +64,16 @@ def handle_register(username, password, password2):
 
     if password != password2:
         return "Passwords does not match."
-        
+
     if len(username) <= 0 or len(password) <= 0:
         return "Username or password cannot be empty"
+        
+    if len(username) < 3:
+        return "Username has to be longer than 3 characters"
     
+    if len(password) < 3:
+        return "Password has to be longer than 3 characters"
+
     if check_if_username_exists(username):
         return "Account with given username already exists. Please use another username."
 
