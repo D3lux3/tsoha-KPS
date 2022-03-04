@@ -13,6 +13,7 @@ https://tsoha-kps.herokuapp.com/
 * Toisten pelaajien kaveriksi lisääminen
 * Vain kaverille näkyvät pelikutsut
 * Admin käyttäjä voi poistaa pelejä ja pelaajien käyttäjiä.
+* Kaverilista ominaisuus, josta pelaajat voivat tarkastella omia kavereitaan.
 
 Ideana on, että käyttäjä voi rekisteröityä, kirjautua ja aloittaa kivi paperi sakset tyylisen pelin tai pelata toisen luomaa kivi paperi sakset peliä. 
 
@@ -24,5 +25,15 @@ Käyttäjä B näkee pelin "seinällään" ja valita Käyttäjä A:n luomaan pel
 
 Tämän jälkeen pelin tulos tulee näkyviin.
 
-Projekti on muutamaa bugfixejä ja käyttöliittymän parantamista vajaa valmis.
+#### Ylläpitäjän näkymä:
+
+Kirjautumalla seuraavilla ylläpitäjä tunnuksilla voi ohjelmaa hallita ylläpitäjän oikeuksin:
+
+```shell
+Käyttäjätunnus:
+admin
+Salasana:
+admin
+````
+
 
