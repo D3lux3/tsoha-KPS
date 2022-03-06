@@ -25,6 +25,12 @@ Kaverukset voivat lähettää toisilleen pelipyyntöjä, joita vaan he voivat pe
 Ylläpitäjä pystyy poistamaan käyttäjiä ja pelaajia. 
 
 
+### Testaaminen Herokussa
+
+Projektia voi kokeilla yllä olevalla linkillä Heroku projektiin.
+
+Aloita rekisteröitymällä, ja jos sivulla ei ole aktiivisa pelejä, niin suosittelen luomaan uuden käyttäjän ja luoda sillä uusi peli. Kannattaa myös lisätä tekemäsi käyttäjät toistensa ystäviksi.
+
 
 ### Ylläpitäjän näkymä:
 
